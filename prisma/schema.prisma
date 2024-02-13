@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                Int                @id @default(autoincrement())
+  firstName      String  @map("first_name")
+  lastName       String  @map("last_name")
+  address        String
+  email          String             @unique
+  username       String             @unique
+  password       String            @db.VarChar(72)
+  phone          String?    
+ 
+}
+
+model CarID {
+  id                     Int                @id @default(autoincrement())
+  Brand                 String
+  Model                 String
+  ManufacturingYear     String
+  VehicleTypeID           Int                @map("vehicletype_id")
+}
+
+model InstallmentContract {
+  id             Int     @id @default(autoincrement())
+  StartDate          String
+  Installments          String?
+  TotalAmount        String?
+  PaidAmount         String?
+  userId         Int     @map("user_id")
+  CarID         Int     @map("car_id")
+}
+
+model PaymentHistory {
+  id         Int      @id @default(autoincrement())
+  PaymentDate         String?
+  Amount         String?
+  ContractID  Int      @map("contract_id")
+}
+
+model VehicleType {
+  id                  Int            @id @default(autoincrement())
+  TypeName            String?           
+  Description         String?
+}
+
+enum Status {
+  PENDING
+  DOING
+  DONE
+}
